@@ -1,0 +1,286 @@
+VectorShift Assessment - Complete 5 Minute Loom Video Presentation Script
+======================================================================
+
+Goal:
+Record this in Loom free plan, so keep the video under 5 minutes.
+Target time: 4 minutes 40 seconds to 4 minutes 55 seconds.
+
+Main demos to show:
+1. Basic LLM Assistant
+2. Customer Email Automation
+
+Before recording:
+- Start backend: cd backend && ./setup_and_run.sh
+- Start frontend: cd frontend && ./setup_and_run.sh
+- Open: http://localhost:3000
+- Keep browser zoom around 80% or 90% so the full workflow is visible.
+- Keep this script open on another screen or read it once before recording.
+
+============================================================
+0:00 - 0:25
+Opening Introduction
+============================================================
+
+Hello, my name is Praveen Sanpada.
+
+In this video, I will present my VectorShift frontend assessment project.
+
+This is a visual AI pipeline builder where users can drag nodes, connect them,
+create dynamic prompt variables, and submit the workflow for backend validation.
+
+The frontend is built using React and React Flow, and the backend is built using
+FastAPI.
+
+I will keep this demo short because I am recording in Loom's free 5 minute limit.
+
+============================================================
+0:25 - 1:10
+Project Overview
+============================================================
+
+On the screen, this is the VectorShift Pipeline Builder.
+
+At the top, we have a node toolbar. From here, the user can add nodes like:
+Input, LLM, Text, Output, API, PDF Loader, Database, Summarizer, and Email.
+
+The center area is the canvas. This is where the user builds the workflow.
+
+At the bottom, there is a submit section. When I submit the pipeline, the
+frontend sends all nodes and edges to the backend.
+
+The backend then returns:
+- number of nodes
+- number of edges
+- and whether the graph is a DAG
+
+A DAG means Directed Acyclic Graph. In simple words, the workflow should not
+have a cycle.
+
+============================================================
+1:10 - 1:55
+Architecture Explanation
+============================================================
+
+The code is split into frontend and backend.
+
+On the frontend:
+- PipelineToolbar renders the node buttons.
+- PipelineCanvas renders the React Flow canvas.
+- SubmitPanel sends the graph to the backend.
+- BaseNode gives a reusable layout for all nodes.
+- TextNode handles dynamic variables.
+- store.js stores the nodes, edges, and workflow name.
+
+On the backend:
+- main.py exposes the pipeline parse API.
+- schemas.py defines request and response models.
+- graph_utils.py counts nodes, counts edges, and checks DAG validity.
+
+I kept the backend simple because the main requirement is graph validation.
+
+============================================================
+1:55 - 2:35
+Important Feature: Dynamic Text Handles
+============================================================
+
+The most important custom feature is the Text node.
+
+When I type a variable inside double curly braces, for example:
+
+{{question}}
+
+the Text node automatically creates a new handle called question.
+
+If I type:
+
+{{name}}
+{{status}}
+
+then the Text node creates two dynamic handles: name and status.
+
+This makes the workflow flexible because the Text node can accept values from
+different upstream nodes like Input, Database, or API.
+
+============================================================
+2:35 - 3:25
+Demo 1: Basic LLM Assistant
+============================================================
+
+Now I will show the first workflow: Basic LLM Assistant.
+
+Workflow:
+
+[Input]
+   |
+   v
+[Text]
+   |
+   v
+[LLM]
+   |
+   v
+[Output]
+
+Node data:
+
+1) Input
+Name: question
+Type: Text
+
+2) Text
+You are a helpful AI assistant. Answer the user question clearly, simply, and professionally.
+User question: {{question}}
+
+3) LLM
+Model: GPT-4o Mini
+Temperature: Balanced
+
+4) Output
+Name: output
+Type: Text
+
+What to say while showing it:
+
+This is the simplest AI assistant workflow.
+
+The Input node receives a user question. The Text node converts that question
+into a clean prompt. Because the prompt contains {{question}}, the Text node
+automatically creates a question handle.
+
+Then the prompt goes to the LLM node, and the final response goes to the Output
+node.
+
+This demo is good because it is simple, easy to understand, and clearly shows
+Input, Text, LLM, and Output working together.
+
+Now I click Submit Pipeline.
+
+The result shows:
+- 4 nodes
+- 4 edges
+- Is DAG: Yes
+
+That means the pipeline is valid and cycle-free.
+
+============================================================
+3:25 - 4:35
+Demo 2: Customer Email Automation
+============================================================
+
+Now I will show the second workflow: Customer Email Automation.
+
+Workflow:
+
+[Database]       [API]
+     |             |
+     v             v
+          [Text]
+             |
+             v
+           [LLM]
+             |
+             v
+          [Email]
+
+Node data:
+
+1) Database
+Type: MySQL
+Query:
+SELECT name, email
+FROM users
+WHERE id = 1;
+
+2) API
+Method: GET
+Endpoint:
+https://api.vectorshift.ai/user-status/1
+
+3) Text
+Write a short, polite, and professional customer update email for {{name}}.
+Current user status: {{status}}
+
+4) LLM
+Model: GPT-4o Mini
+Temperature: Balanced
+
+5) Email
+To:
+{{email}}
+
+Subject:
+Your Account Status Has Been Updated
+
+What to say while showing it:
+
+This workflow is more realistic and business-focused.
+
+The Database node represents customer data. It returns the user's name and
+email.
+
+The API node represents an external service that returns the current user
+status.
+
+Both values are connected into the Text node.
+
+The Text node contains two important dynamic variables:
+
+{{name}}
+{{status}}
+
+It also uses {{email}} in the Email node recipient field.
+
+The Text node prepares a professional customer update prompt. Then the LLM node
+generates the final email body, and the Email node represents sending that
+message to the customer.
+
+This is a strong demo because it looks like a real automation workflow. It uses
+multiple inputs, dynamic variables, an LLM generation step, and a final business
+action.
+
+Now I click Submit Pipeline.
+
+The result shows:
+- 5 nodes
+- 5 edges
+- Is DAG: Yes
+
+That means this workflow is also valid.
+
+============================================================
+4:35 - 4:55
+Closing
+============================================================
+
+To summarize, this project demonstrates a clean visual workflow builder using
+React Flow on the frontend and FastAPI on the backend.
+
+The key parts are:
+- reusable node abstraction
+- dynamic Text node handles
+- pipeline submission
+- backend DAG validation
+- and realistic AI workflow demos
+
+Thank you for watching my VectorShift assessment presentation.
+
+============================================================
+Quick 5 Minute Recording Checklist
+============================================================
+
+Do:
+- Start directly on the app screen.
+- Speak only the important points.
+- Show Basic LLM Assistant first.
+- Show Customer Email Automation second.
+- Submit both pipelines.
+- End before 5 minutes.
+
+Avoid:
+- Do not explain every code file in detail.
+- Do not open too many tabs.
+- Do not spend more than 1 minute on architecture.
+- Do not debug during recording.
+
+Best final line:
+"Thank you for watching my VectorShift assessment presentation."
