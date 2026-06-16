@@ -592,11 +592,11 @@ code {
 }
 
 .node-handle-label--left {
-  left: 16px;
+  right: calc(100% + 9px);
 }
 
 .node-handle-label--right {
-  right: 16px;
+  left: calc(100% + 9px);
 }
 
 .variable-list {
